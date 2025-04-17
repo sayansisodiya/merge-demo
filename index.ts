@@ -1,9 +1,9 @@
-import { ALPHA } from './constants';
+import { token } from './constants';
 
 function processData(data: string): string {
-    if (ALPHA === 'production') {
+    if (token === 'production') {
         return `PRODUCTION MODE: ${data.toUpperCase()}`;
-    } else if (ALPHA === 'staging') {
+    } else if (token === 'staging') {
         return `STAGING MODE: ${data}`;
     } else {
         return `DEVELOPMENT MODE: ${data.toLowerCase()}`;
@@ -11,4 +11,4 @@ function processData(data: string): string {
 }
 
 console.log(processData('Sample Text'));
-console.log(`Current environment: ${ALPHA}`);
+console.log(`Current environment: ${token}`);
