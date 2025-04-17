@@ -1,14 +1,28 @@
 import { token } from './constants';
 
-function processData(data: string): string {
-    if (token === 'production') {
-        return `PRODUCTION MODE: ${data.toUpperCase()}`;
-    } else if (token === 'staging') {
-        return `STAGING MODE: ${data}`;
+function getAuthHeader(token: string): string {
+    if (token.includes(':')) {
+        // Legacy system expects raw token with colons removed
+        return token.replace(/:/g, '');
     } else {
-        return `DEVELOPMENT MODE: ${data.toLowerCase()}`;
+        // Modern system expects Bearer-prefixed JWT-style token
+        return `Bearer ${token}`;
     }
 }
 
-console.log(processData('Sample Text'));
-console.log(`Current environment: ${token}`);
+async function callApi(token: string) {
+    const authHeader = getAuthHeader(token);
+
+    const response = await fetch('https://api.example.com/data', {
+        method: 'GET',
+        headers: {
+            Authorization: authHeader,
+        },
+    });
+
+    if (!response.ok) {
+        console.error('API call failed with status:', response.status);
+    }
+}
+
+callApi(token);
